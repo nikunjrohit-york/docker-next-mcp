@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export default function Home() {
   // Check if OAuth is configured
@@ -12,25 +13,16 @@ export default function Home() {
       <p className="text-gray-400 mb-8">Your Local AI Project Intelligence Dashboard</p>
       {isOAuthConfigured ? (
         <div className="flex gap-4">
-          <Link
-            href="/api/auth/signin"
-            className="px-6 py-3 bg-gray-700 rounded-lg hover:bg-gray-600 font-medium transition-all"
-          >
-            Sign In
+          <Link href="/api/auth/signin">
+            <Button variant="secondary" size="lg">Sign In</Button>
           </Link>
-          <Link
-            href="/dashboard"
-            className="px-6 py-3 bg-blue-600 rounded-lg hover:bg-blue-500 font-medium transition-all"
-          >
-            Continue as Guest
+          <Link href="/dashboard">
+            <Button variant="primary" size="lg">Continue as Guest</Button>
           </Link>
         </div>
       ) : (
-        <Link
-          href="/dashboard"
-          className="px-6 py-3 bg-blue-600 rounded-lg hover:bg-blue-500 font-medium transition-all"
-        >
-          Enter Dashboard
+        <Link href="/dashboard">
+          <Button variant="primary" size="lg">Enter Dashboard</Button>
         </Link>
       )}
       <p className="text-gray-600 text-sm mt-4">
