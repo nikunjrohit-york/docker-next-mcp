@@ -24,7 +24,8 @@ jobs:
         run: |
           # Prefer npm CI if a package-lock.json is present
           if [ -f package-lock.json ]; then
-            npm ci
+            # Use legacy peer deps to avoid ERESOLVE breaks for older peers
+            npm ci --legacy-peer-deps
           # If this repo uses Bun (bun.lockb), install Bun and dependencies
           elif [ -f bun.lockb ]; then
             curl -fsSL https://bun.sh/install | bash
