@@ -26,15 +26,17 @@ jobs:
           if [ -f package-lock.json ]; then
             # Use legacy peer deps to avoid ERESOLVE breaks for older peers
             npm ci --legacy-peer-deps
-          # If this repo uses Bun (bun.lockb), install Bun and dependencies
-          elif [ -f bun.lockb ]; then
+          # If this repo uses Bun (bun.lockb or bun.lock), install Bun and dependencies
+          elif [ -f bun.lockb ] || [ -f bun.lock ]; then
             curl -fsSL https://bun.sh/install | bash
             # Ensure bun is on PATH in this session
             export PATH="$HOME/.bun/bin:$PATH"
             bun install
           else
             # Fallback to npm install if nothing else matches
-            npm install
+            # Use legacy peer deps here too so npm doesn't fail on packages with
+            # peer dependency requirements incompatible with npm v7+ enforcement.
+            npm install --legacy-peer-deps
           fi
         
       - name: Run Biome CI checks
