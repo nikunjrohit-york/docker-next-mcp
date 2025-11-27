@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  insightone:
+    image: insightone:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.standalone
+    ports:
+      - "${PORT:-3001}:3000"
+    environment:
+      - DATABASE_URL=file:/app/data/insightone.db
+      - NEXTAUTH_URL=http://localhost:${PORT:-3001}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-change-me-in-production}
+      - AI_PROVIDER=${AI_PROVIDER:-local}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-http://host.docker.internal:11434/v1}
+      - GITHUB_ID=${GITHUB_ID:-}
+      - GITHUB_SECRET=${GITHUB_SECRET:-}
+      - REPO_PATH=/app/repo
+    volumes:
+      - insightone-data:/app/data
+      - .:/app/repo:ro  # Mount current directory as the repository
+    restart: unless-stopped
+
+volumes:
+  insightone-data:
