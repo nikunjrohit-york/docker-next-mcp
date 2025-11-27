@@ -57,3 +57,8 @@ prisma/dev.db-journal
 
 # Plan files
 InsightOne-Plan/
+
+# Ollama local models directory - these are large binary model files and should not
+# be included in Docker build context or added into images
+ollama-data
+ollama-data/**

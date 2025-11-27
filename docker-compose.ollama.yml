@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # Ollama server (Local LLM service)
+  # NOTE: Replace the image below with the official image you prefer or the
+  # latest published location if ghcr.io path differs. For many setups
+  # ghcr.io/ollama/ollama:latest works as a placeholder.
+  ollama:
+    # Official Ollama Docker Hub image. Use `ollama/ollama:latest` for Docker Hub.
+    # Some users report the image is available as `ollama/ollama` on Docker Hub.
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama-data:/root/.ollama
+    # Optional: Uncomment platform if using Apple Silicon/arm64 and the image lacks arm support
+    # platform: linux/amd64
+    # Healthcheck ensures the Ollama API is reachable. The app can wait using `depends_on` and a wait script if needed.
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:11434/api/tags || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Override the app service settings so it points to the Ollama service
+  # when starting both compose files together. This avoids editing the base
+  # compose file and keeps the override self-contained.
+  app:
+    environment:
+      - AI_PROVIDER=local
+      - OPENAI_BASE_URL=http://ollama:11434/v1
+    depends_on:
+      - ollama
+    # Command may not be necessary for official image; add or adjust as needed
+    # command: ["serve"]

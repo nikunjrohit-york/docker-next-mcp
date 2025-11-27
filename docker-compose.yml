@@ -14,12 +14,16 @@ services:
       # Docker Model Runner (Local LLM)
       - AI_PROVIDER=local
       - OPENAI_BASE_URL=http://host.docker.internal:11434/v1
+      - REPO_PATH=/app
     volumes:
       - .:/app
       - /app/node_modules
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - db
+    # Ensure Prisma client is generated before starting the Next dev server — useful for development
+    # Wait for DB to be ready, then generate Prisma client and apply migrations before starting dev server
+    command: sh -c "until pg_isready -h db -p 5432; do echo 'waiting for db...'; sleep 1; done; bunx prisma generate && (bunx prisma migrate deploy || bunx prisma db push) && bun run dev"
 
   db:
     image: postgres:16-alpine

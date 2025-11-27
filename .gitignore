@@ -40,3 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /InsightOne-Plan
+# Local Ollama models (do not commit large model blobs)
+ollama-data/
+ollama-data/*
