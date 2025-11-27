@@ -14,15 +14,21 @@ export default function Home() {
       {isOAuthConfigured ? (
         <div className="flex gap-4">
           <Link href="/api/auth/signin">
-            <Button variant="secondary" size="lg">Sign In</Button>
+            <Button variant="secondary" size="lg">
+              Sign In
+            </Button>
           </Link>
           <Link href="/dashboard">
-            <Button variant="primary" size="lg">Continue as Guest</Button>
+            <Button variant="primary" size="lg">
+              Continue as Guest
+            </Button>
           </Link>
         </div>
       ) : (
         <Link href="/dashboard">
-          <Button variant="primary" size="lg">Enter Dashboard</Button>
+          <Button variant="primary" size="lg">
+            Enter Dashboard
+          </Button>
         </Link>
       )}
       <p className="text-gray-600 text-sm mt-4">

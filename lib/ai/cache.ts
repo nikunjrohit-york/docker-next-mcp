@@ -1,30 +1,29 @@
+import crypto from 'node:crypto';
 import { prisma } from '@/lib/db';
-import crypto from 'crypto';
 
 export function computeHash(content: string): string {
-    return crypto.createHash('sha256').update(content).digest('hex');
+  return crypto.createHash('sha256').update(content).digest('hex');
 }
 
 export async function getCachedSummary(hash: string): Promise<string | null> {
-    try {
-        const cached = await prisma.analysisCache.findUnique({
-            where: { hash },
-        });
-        return cached?.summary || null;
-    } catch (e) {
-        console.error('Cache read error:', e);
-        return null;
-    }
+  try {
+    const cached = await prisma.analysisCache.findUnique({
+      where: { hash },
+    });
+    return cached?.summary || null;
+  } catch (_e) {
+    return null;
+  }
 }
 
 export async function setCachedSummary(hash: string, summary: string): Promise<void> {
-    try {
-        await prisma.analysisCache.upsert({
-            where: { hash },
-            update: { summary },
-            create: { hash, summary },
-        });
-    } catch (e) {
-        console.error('Cache write error:', e);
-    }
+  try {
+    await prisma.analysisCache.upsert({
+      where: { hash },
+      update: { summary },
+      create: { hash, summary },
+    });
+  } catch (_e) {
+    // Intentionally ignore cache errors - cache is optional and failures should not break the app
+  }
 }

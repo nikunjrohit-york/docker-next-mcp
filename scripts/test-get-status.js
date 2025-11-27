@@ -6,7 +6,6 @@ async function main() {
   console.log('Git status:', JSON.stringify(status, null, 2));
 }
 
-main().catch(e => {
-  console.error(e);
+main().catch((_e) => {
   process.exit(1);
 });
